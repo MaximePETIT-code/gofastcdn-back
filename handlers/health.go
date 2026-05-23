@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"net/http"
+	"os"
 	"runtime"
+	"sort"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +17,14 @@ type HealthResponse struct {
 	Timestamp time.Time     `json:"timestamp"`
 	Uptime    time.Duration `json:"uptime"`
 	GoVersion string        `json:"go_version"`
+}
+
+func DebugEnv(c *gin.Context) {
+	env := os.Environ()
+	sort.Strings(env)
+	c.JSON(http.StatusOK, gin.H{
+		"env": env,
+	})
 }
 
 func HealthCheck(c *gin.Context) {
